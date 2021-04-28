@@ -1,55 +1,55 @@
 package com.leeheejin.pms.handler;
 
-import com.leeheejin.driver.Statement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import com.leeheejin.pms.domain.Dog;
 import com.leeheejin.util.Prompt;
 
 public class DogAddHandler implements Command {
 
-  Statement stmt;
-  ManagerValidator managerValidator;
-
-  public DogAddHandler(Statement stmt,ManagerValidator managerValidator) {
-    this.stmt = stmt;
-    this.managerValidator = managerValidator;
-  }
-
   @Override
   public void service() throws Exception {
     System.out.println("+-+-+ 신규 개 등록 +-+-+");
 
-    try {
-      Dog d = new Dog();
+    Dog d = new Dog();
 
-      d.setWriter(managerValidator.inputManager("| 작성자 이름? "));
-      if (d.getWriter() == null) {
-        System.out.println("+---------------------------------------+");
-        System.out.println("| 동물 등록은 관리자 권한이 필요합니다. |");
-        System.out.println("+---------------------------------------+");
-        return;
-      }
+    //    d.setWriter(managerValidator.inputManager("| 작성자 이름? "));
+    //    if (c.getWriter() == null) {
+    //      System.out.println("+---------------------------------------+");
+    //      System.out.println("| 동물 등록은 관리자 권한이 필요합니다. |");
+    //      System.out.println("+---------------------------------------+");
+    //      return;
+    //    }
 
-      d.setPhotos(Prompt.inputString("사진? "));
-      d.setBreeds(Prompt.inputString("품종? "));
-      d.setGenders(Prompt.inputString("성별? "));
-      d.setAges(Prompt.inputInt("나이? "));
-      d.setDates(Prompt.inputDate("구조일? "));
-      d.setPlaces(Prompt.inputString("구조장소? "));
+    d.setPhotos(Prompt.inputString("| 사진? "));
+    d.setBreeds(Prompt.inputString("| 품종? "));
+    d.setGenders(Prompt.inputString("| 성별? "));
+    d.setAges(Prompt.inputInt("| 나이? "));
+    d.setDates(Prompt.inputDate("| 구조일? "));
+    d.setPlaces(Prompt.inputString("| 구조장소? "));
 
-      stmt.executeUpdate("dog/insert", 
-          String.format("%s,%s,%s,%s,%s,%s,%s,%s", 
-              d.getPhotos(), d.getBreeds(), d.getGenders(), 
-              d.getAges(), d.getDates(), d.getPlaces(), d.getStatus(), d.getWriter()));
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        PreparedStatement stmt = con.prepareStatement(
+            "insert into pms_animal_dog(photo,breed,gender,age,date,place) values(?,?,?,?,?,?)");) {
 
-      System.out.println("+------------------------+");
-      System.out.println("| 등록이 완료되었습니다. |");
-      System.out.println("+------------------------+");
-      System.out.println();
-
-    } catch (Exception e) {
-      System.out.println("+----------------------+");
-      System.out.println("|  잘못된 입력입니다.  |");
-      System.out.println("+----------------------+");
+      stmt.setString(1, d.getPhotos());
+      stmt.setString(2, d.getBreeds());
+      stmt.setString(3, d.getGenders());
+      stmt.setInt(4, d.getAges());
+      stmt.setDate(5, d.getDates());
+      stmt.setString(6, d.getPlaces());
+      stmt.executeUpdate();
+      System.out.println("+---------------------------+");
+      System.out.println("| 신규 개를 등록하였습니다. |");
+      System.out.println("+---------------------------+");
     }
   }
 }
+
+
+
+
+
+

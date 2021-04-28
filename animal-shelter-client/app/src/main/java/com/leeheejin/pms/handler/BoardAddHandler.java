@@ -1,44 +1,42 @@
 package com.leeheejin.pms.handler;
 
-import java.sql.Date;
-import com.leeheejin.driver.Statement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import com.leeheejin.pms.domain.Board;
 import com.leeheejin.util.Prompt;
 
 public class BoardAddHandler implements Command {
 
-  Statement stmt;
-
-  public BoardAddHandler(Statement stmt) {
-    this.stmt = stmt;
-  }
-
   @Override
-  public void service(String menuName, String name) {
-    System.out.printf("[ 홈 > %s > 게시판 > %s > 글쓰기* ]\n", menuName, name);
+  public void service() throws Exception {
+    System.out.println("+-+-+ 게시글 등록 +-+-+");
 
-    try {
-      Board b = new Board();
+    Board b = new Board();
 
-      stmt.executeUpdate("board/insert", 
-          String.format("%s,%s,%s", b.getTitle(), b.getContent(), b.getWriter()));
+    b.setTitle(Prompt.inputString("| 제목? "));
+    b.setContent(Prompt.inputString("| 내용? "));
+    b.setWriter(Prompt.inputString("| 작성자? "));
 
-      b.setPassword(Prompt.inputInt("비밀번호>> "));
-      b.setTitle(Prompt.inputString("제목>> "));
-      b.setContent(Prompt.inputString("내용>> "));
-      b.setRegisteredDate(new Date(System.currentTimeMillis()));
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        PreparedStatement stmt =
+            con.prepareStatement("insert into pms_board(title, content, writer) values(?,?,?)");) {
 
-      boardList.add(b);
+      stmt.setString(1, b.getTitle());
+      stmt.setString(2, b.getContent());
+      stmt.setString(3, b.getWriter());
 
-      System.out.println("- 게시글 등록이 완료되었습니다. ");
-      System.out.println();
-    } catch (Exception e) {
-      System.out.println("---------------------");
-      System.out.println(" 잘못된 입력입니다. ");
-      System.out.printf("명령어 실행 중 오류 발생: %s - %s\n", 
-          e.getClass().getName(), e.getMessage());
-      e.printStackTrace();
-      System.out.println("---------------------");
+      stmt.executeUpdate();
+      System.out.println("+--------------------------+");
+      System.out.println("| 게시글을 등록하였습니다. |");
+      System.out.println("+--------------------------+");
     }
   }
 }
+
+
+
+
+
+

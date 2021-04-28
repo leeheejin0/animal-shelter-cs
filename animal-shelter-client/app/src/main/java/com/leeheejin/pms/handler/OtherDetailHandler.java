@@ -1,34 +1,50 @@
 package com.leeheejin.pms.handler;
 
-import com.leeheejin.driver.Statement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import com.leeheejin.util.Prompt;
 
 public class OtherDetailHandler implements Command {
 
-  Statement stmt;
-
-  public OtherDetailHandler (Statement stmt) {
-    this.stmt = stmt;
-  }
-
   @Override
-  public void service() throws Exception{
+  public void service() throws Exception {
     System.out.println("+-+-+ 기타동물 상세보기 +-+-+");
 
-    int no = Prompt.inputInt("| 번호? ");
+    int id = Prompt.inputInt("| 번호? ");
 
-    String[] fields = 
-        stmt.executeQuery("other/select", Integer.toString(no)).next().split(",");
-    System.out.println("+");
-    System.out.printf("| 종류: %s\n ", fields[1]);
-    System.out.printf("| 사진: %s\n ", fields[2]);
-    System.out.printf("| 품종: %s\n ", fields[3]);
-    System.out.printf("| 성별: %s\n ", fields[4]);
-    System.out.printf("| 나이: %s\n ", fields[5]);
-    System.out.printf("| 구조일: %s\n ", fields[6]);
-    System.out.printf("| 구조장소: %s\n ", fields[7]);
-    System.out.printf("| 상태: %s\n ", fields[8]);
-    System.out.printf("| 등록자: %s\n ", fields[9]);
-    System.out.println("+");
+    try (Connection con = DriverManager.getConnection( //
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        PreparedStatement stmt = con.prepareStatement( //
+            "select * from pms_animal_othr where id = ?")) {
+
+      stmt.setInt(1, id);
+
+      try (ResultSet rs = stmt.executeQuery()) {
+        if (!rs.next()) {
+          System.out.println("+----------------------------------+");
+          System.out.println("| 해당 번호의 기타동물이 없습니다. |");
+          System.out.println("+----------------------------------+");
+          return;
+        }
+        System.out.println("+");
+        System.out.printf("| 동물 종류: %s\n", rs.getString("species"));
+        System.out.printf("| 사진: %s\n", rs.getString("photo"));
+        System.out.printf("| 품종: %s\n", rs.getString("breed"));
+        System.out.printf("| 성별: %s\n", rs.getString("gender"));
+        System.out.printf("| 나이: %s\n", rs.getString("age"));
+        System.out.printf("| 구조일: %s\n", rs.getDate("date"));
+        System.out.printf("| 구조장소: %s\n", rs.getString("place"));
+        System.out.printf("| 상태: %s\n", rs.getString("status"));
+        System.out.println("+");
+      }
+    }
   }
 }
+
+
+
+
+
+

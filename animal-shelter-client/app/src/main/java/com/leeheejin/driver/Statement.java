@@ -18,9 +18,11 @@ public class Statement implements AutoCloseable {
     out = new DataOutputStream(socket.getOutputStream());
   }
 
+  // 데이터를 입력, 변경, 삭제할 때 호출하는 메서드 
   public void executeUpdate(String command, String... args) throws Exception {
     request(command, args);
 
+    // 서버의 응답 결과를 받는다.
     String status = in.readUTF();
     in.readInt();
     if (status.equals("error")) {
@@ -28,9 +30,11 @@ public class Statement implements AutoCloseable {
     }
   }
 
-  public Iterator<String> executeQuery(String command, String...args) throws Exception {
+  // 데이터 목록을 조회하거나 특정 항목을 조회할 때 호출하는 메서드
+  public Iterator<String> executeQuery(String command, String... args) throws Exception {
     request(command, args);
 
+    // 서버의 응답 결과를 받는다.
     String status = in.readUTF();
     int length = in.readInt();
 
@@ -38,6 +42,7 @@ public class Statement implements AutoCloseable {
       throw new Exception(in.readUTF());
     }
 
+    // 응답 결과를 담을 컬렉션 준비
     ArrayList<String> results = new ArrayList<>();
 
     for (int i = 0; i < length; i++) {
@@ -47,7 +52,8 @@ public class Statement implements AutoCloseable {
     return results.iterator();
   }
 
-  private void request(String command, String...args) throws Exception {
+  private void request(String command, String... args) throws Exception {
+    // 서버에 요청을 보낸다.
     out.writeUTF(command);
     out.writeInt(args.length);
     for (String data : args) {
@@ -63,3 +69,10 @@ public class Statement implements AutoCloseable {
     try {socket.close();} catch (Exception e) {}
   }
 }
+
+
+
+
+
+
+

@@ -1,70 +1,68 @@
 package com.leeheejin.pms.handler;
 
-import java.sql.Date;
-import com.leeheejin.driver.Statement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import com.leeheejin.pms.domain.Cat;
 import com.leeheejin.util.Prompt;
 
 public class CatUpdateHandler implements Command {
 
-  Statement stmt;
-  ManagerValidator managerValidator;
-
-  public CatUpdateHandler (Statement stmt,ManagerValidator managerValidator) {
-    this.stmt = stmt;
-    this.managerValidator = managerValidator;
-  }
-
   @Override
-
   public void service() throws Exception {
-    System.out.println("+-+-+ 고양이 정보 수정 +-+-+");
+    System.out.println("+-+-+ 고양이 상태 변경 +-+-+");
 
-    int updateNo = Prompt.inputInt("| 번호? ");
+    int no = Prompt.inputInt("| 번호? ");
 
-    String writer = managerValidator.inputManager("| 관리자 이름? ");
-    if (writer.length() == 0) {
-      System.out.println("+---------------------------------------+");
-      System.out.println("| 정보 수정은 관리자 권한이 필요합니다. |");
-      System.out.println("+---------------------------------------+");
-      return;
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        PreparedStatement stmt = con.prepareStatement(
+            "select * from pms_animal_cat where id = ?");
+        PreparedStatement stmt2 = con.prepareStatement(
+            "update pms_animal_cat set status=? where id=?")) {
+
+      Cat c = new Cat();
+
+      // 1) 기존 데이터 조회
+      stmt.setInt(1, no);
+      try (ResultSet rs = stmt.executeQuery()) {
+        if (!rs.next()) {
+          System.out.println("+------------------------------+");
+          System.out.println("| 해당 번호의 회원이 없습니다. |");
+          System.out.println("+------------------------------+");
+          return;
+        }
+
+        c.setIds(no); 
+        c.setStatus(rs.getString("status"));
+      }
+
+      // 2) 사용자에게서 변경할 데이터를 입력 받는다.
+      c.setStatus(Prompt.inputString(String.format("| 상태(%s)? ", c.getStatus())));
+
+
+      String input = Prompt.inputString("| 정말 변경하시겠습니까?(y/N) ");
+      if (!input.equalsIgnoreCase("Y")) {
+        System.out.println("+-----------------------------+");
+        System.out.println("| 회원 변경을 취소하였습니다. |");
+        System.out.println("+-----------------------------+");
+        return;
+      }
+
+      // 3) DBMS에게 데이터 변경을 요청한다.
+      stmt2.setString(1, c.getStatus());
+      stmt2.executeUpdate();
+
+      System.out.println("+------------------------+");
+      System.out.println("| 회원을 변경하였습니다. |");
+      System.out.println("+------------------------+");
     }
-
-    String[] fields = stmt.executeQuery("cat/update", Integer.toString(updateNo)).next().split(",");
-
-    String photos = Prompt.inputString(String.format("| 사진?[%d] ", fields));
-    String photos = Prompt.inputString(String.format("", fields));
-    String breeds = Prompt.inputString(String.format("", fields));
-    String genders = Prompt.inputString(String.format("", fields));
-    int ages = Prompt.inputInt(String.format("", fields));
-    Date dates = Prompt.inputDate(String.format("", fields));
-    String places = Prompt.inputString(String.format("", fields));
-    String status = Prompt.inputString(String.format("", fields));
-    //    int updateNo = Prompt.inputInt("<상태수정>\n번호? ");
-    //
-    //    if (updateNo <= catList.size()) {
-    //
-    //      print(updateNo - 1);
-    //      String updateStatus = Prompt.inputString("1: 공고중 | 2: 입양완료\n>> ");
-    //      String stateLabel = null;
-    //      switch (updateStatus) {
-    //        case "1":
-    //          stateLabel = "공고중";
-    //          break;
-    //        case "2":
-    //          stateLabel = "입양완료";
-    //          break;
-    //        default:
-    //          stateLabel = "신규";
-    //          break;
-    //      }
-    //      Cat c = catList.get(updateNo - 1);
-    //      c.setStatus(stateLabel);
-    //      System.out.println("<수정완료>");
-    //      System.out.println();
-    //      return;
-    //    } else {
-    //      System.out.println("- 잘못 입력하셨습니다. ");
-    //      System.out.println();
-    //    }
   }
 }
+
+
+
+
+
+

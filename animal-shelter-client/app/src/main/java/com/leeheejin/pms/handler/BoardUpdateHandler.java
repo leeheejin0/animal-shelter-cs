@@ -1,48 +1,69 @@
 package com.leeheejin.pms.handler;
 
-import java.sql.Date;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import com.leeheejin.pms.domain.Board;
 import com.leeheejin.util.Prompt;
 
-public class BoardUpdateHandler extends AbstractBoardHandler {
-
-  public BoardUpdateHandler(List<Board> boardList) {
-    super(boardList);
-  }
+public class BoardUpdateHandler implements Command {
 
   @Override
-  public void service(int updateNo) {
-    try {
-      int password = Prompt.inputInt("<수정>\n비밀번호? ");
-      if (findByPw(updateNo, password)) {
-        System.out.println("-");
-        Board b = boardList.get(updateNo - 1);
-        b.setName(Prompt.inputString("이름>> "));
-        b.setPassword(Prompt.inputInt("비밀번호>> "));
-        b.setTitle(Prompt.inputString("제목>> "));
-        b.setContent(Prompt.inputString("내용>> "));
-        b.setRegisteredDate(new Date(System.currentTimeMillis()));
+  public void service() throws Exception {
+    System.out.println("+-+-+ 게시글 변경 +-+-+");
 
-        System.out.println("==========================================================");
-        System.out.printf("<  %s  >                %s | %s |\n", 
-            b.getTitle(), b.getName(), b.getRegisteredDate());
-        System.out.println(" --------------------------------------------------------");
-        System.out.printf("  %s\n", b.getContent());
-        System.out.println(" --------------------------------------------------------");
-        System.out.printf("                              조회수 : %d | 좋아요 : %d |\n", 
-            b.getViewCount(), b.getLike());
-        System.out.println("==========================================================");
-        System.out.println("- <수정완료>");
-        System.out.println();
-      } else {
-        System.out.println("- 비밀번호가 일치하지 않습니다. ");
-        System.out.println();
+    int no = Prompt.inputInt("| 번호? ");
+
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        PreparedStatement stmt = con.prepareStatement(
+            "select no,title,content from pms_board where no=?");
+        PreparedStatement stmt2 = con.prepareStatement(
+            "update pms_board set title=?, content=? where no=?")) {
+
+      Board board = new Board();
+
+      // 1) 기존 데이터 조회
+      stmt.setInt(1, no);
+      try (ResultSet rs = stmt.executeQuery()) {
+        if (!rs.next()) {
+          System.out.println("+--------------------------------+");
+          System.out.println("| 해당 번호의 게시글이 없습니다. |");
+          System.out.println("+--------------------------------+");
+          return;
+        }
+
+        board.setNo(no); 
+        board.setTitle(rs.getString("title"));
+        board.setContent(rs.getString("content"));
       }
-    } catch (Exception e) {
-      System.out.println("---------------------");
-      System.out.println(" 잘못된 입력입니다. ");
-      System.out.println("---------------------");
+
+      // 2) 사용자에게서 변경할 데이터를 입력 받는다.
+      board.setTitle(Prompt.inputString(String.format("| 제목(%s)? ", board.getTitle())));
+      board.setContent(Prompt.inputString(String.format("| 내용(%s)? ", board.getContent())));
+
+      String input = Prompt.inputString("| 정말 변경하시겠습니까?(y/N) ");
+      if (!input.equalsIgnoreCase("Y")) {
+        System.out.println("+-------------------------------+");
+        System.out.println("| 게시글 변경을 취소하였습니다. |");
+        System.out.println("+-------------------------------+");
+        return;
+      }
+
+      // 3) DBMS에게 게시글 변경을 요청한다.
+      stmt2.setString(1, board.getTitle());
+      stmt2.setString(2, board.getContent());
+      stmt2.setInt(3, board.getNo());
+      stmt2.executeUpdate();
+
+      System.out.println("게시글을 변경하였습니다.");
     }
   }
 }
+
+
+
+
+
+

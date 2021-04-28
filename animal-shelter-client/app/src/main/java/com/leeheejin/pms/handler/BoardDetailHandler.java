@@ -1,53 +1,45 @@
 package com.leeheejin.pms.handler;
 
-import java.util.HashMap;
-import com.leeheejin.driver.Statement;
-import com.leeheejin.pms.domain.Board;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import com.leeheejin.util.Prompt;
 
 public class BoardDetailHandler implements Command {
 
-  Statement stmt;
-
-  public BoardDetailHandler(Statement stmt) {
-    this.stmt = stmt;
-  }
-
   @Override
   public void service() throws Exception {
 
-    HashMap<String, Command> commandMap = new HashMap<>();
+    System.out.println("+-+-+ 게시글 상세보기 +-+-+");
 
-    commandMap.put("1", new BoardUpdateHandler(stmt));
-    commandMap.put("2", new BoardRemoveHandler(stmt));
+    int no = Prompt.inputInt("| 번호? ");
 
-    int detailNo = Prompt.inputInt("<상세보기>\n게시글 번호? ");
-    if (detailNo <= boardList.size()) {
-      Board b = boardList.get(detailNo - 1);
-      b.setViewCount(b.getViewCount() + 1);
-      System.out.println("==========================================================");
-      System.out.printf("<  %s  >                %s | %s |\n", 
-          b.getTitle(), b.getName(), b.getRegisteredDate());
-      System.out.println(" --------------------------------------------------------");
-      System.out.printf("  %s\n", b.getContent());
-      System.out.println(" --------------------------------------------------------");
-      System.out.printf("                              조회수 : %d | 좋아요 : %d |\n", 
-          b.getViewCount(), b.getLike());
-      System.out.println("==========================================================");
-      String command = Prompt.inputString("1: 수정 | 2: 삭제 | 3: 뒤로가기\n>> ");
-      switch (command) {
-        default:
-          Command commandHandler = commandMap.get(command);
-          if (commandHandler == null) {
-            System.out.println("실행할 수 없는 명령입니다.");
-          } else {
-            commandHandler.service(detailNo);
-          }
-          break;
+    try (Connection con = DriverManager.getConnection( //
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        PreparedStatement stmt = con.prepareStatement( //
+            "select * from pms_board where no = ?")) {
+
+      stmt.setInt(1, no);
+
+      try (ResultSet rs = stmt.executeQuery()) {
+        if (!rs.next()) {
+          System.out.println("+--------------------------------+");
+          System.out.println("| 해당 번호의 게시글이 없습니다. |");
+          System.out.println("+--------------------------------+");
+          return;
+        }
+        System.out.println("+");
+        System.out.printf("| 제목: %s\n", rs.getString("title"));
+        System.out.printf("| 내용: %s\n", rs.getString("content"));
+        System.out.printf("| 작성자: %s\n", rs.getString("writer"));
+        System.out.printf("| 등록일: %s %s\n", rs.getDate("cdt"), rs.getTime("cdt"));
+        System.out.printf("| 조회수: %s\n", rs.getString("vw_cnt"));
+        System.out.printf("| 좋아요: %s\n", rs.getString("like_cnt"));
+        System.out.println("+");
       }
-    } else {
-      System.out.println("- 잘못 입력하셨습니다. ");
-      System.out.println();
     }
+
   }
 }
+

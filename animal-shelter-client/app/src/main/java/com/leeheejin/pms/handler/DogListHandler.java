@@ -1,35 +1,38 @@
 package com.leeheejin.pms.handler;
 
-import java.util.Iterator;
-import com.leeheejin.driver.Statement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class DogListHandler implements Command {
 
-  Statement stmt;
-
-  public DogListHandler(Statement stmt) {
-    this.stmt = stmt;
-  }
-
   @Override
   public void service() throws Exception {
-
     System.out.println("+-+-+ 개 구조목록 +-+-+");
 
-    Iterator<String> results = stmt.executeQuery("dog/selectAll");
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        PreparedStatement stmt = con.prepareStatement(
+            "select id,photo,breed,age,status from pms_animal_dog order by id asc");
+        ResultSet rs = stmt.executeQuery()) {
 
-    while (results.hasNext()) {
-      String[] fields = results.next().split(",");
-      System.out.printf("%s, %s, %s, %s, %s, %s, %s, %s, %s\n",
-          fields[0], 
-          fields[1], 
-          fields[2],
-          fields[3],
-          fields[4],
-          fields[5], 
-          fields[6],
-          fields[7],
-          fields[8]);
+      System.out.println("+");
+      while (rs.next()) {
+        System.out.printf("%d, %s, %s, %d, %s\n", 
+            rs.getInt("id"), 
+            rs.getString("photo"), 
+            rs.getString("breed"),
+            rs.getInt("age"),
+            rs.getString("status"));
+      }
+      System.out.println("+");
     }
   }
 }
+
+
+
+
+
+

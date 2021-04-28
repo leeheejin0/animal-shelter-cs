@@ -6,38 +6,31 @@ public class Board {
   private int no;
   private String title;
   private String content;
-  private int password;
+  private String writer;
   private Date registeredDate;
   private int viewCount;
   private int like;
-  private String writer;
 
 
 
   @Override
   public String toString() {
-    return "Board [no=" + no + ", title=" + title + ", content=" + content + ", password="
-        + password + ", registeredDate=" + registeredDate + ", viewCount=" + viewCount + ", like="
-        + like + ", writer=" + writer + "]";
+    return "Board [no=" + no + ", title=" + title + ", content=" + content + ", writer=" + writer
+        + ", registeredDate=" + registeredDate + ", viewCount=" + viewCount + ", like=" + like
+        + "]";
   }
+
   public int getNo() {
     return no;
   }
   public void setNo(int no) {
     this.no = no;
   }
-
   public String getWriter() {
     return writer;
   }
   public void setWriter(String writer) {
     this.writer = writer;
-  }
-  public int getPassword() {
-    return password;
-  }
-  public void setPassword(int password) {
-    this.password = password;
   }
   public String getTitle() {
     return title;
