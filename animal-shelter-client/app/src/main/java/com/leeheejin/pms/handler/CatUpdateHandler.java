@@ -15,6 +15,14 @@ public class CatUpdateHandler implements Command {
 
     int no = Prompt.inputInt("| 번호? ");
 
+    //    String writer = managerValidator.inputManager("| 관리자 이름? ");
+    //    if (writer.length() == 0) {
+    //      System.out.println("+---------------------------------------+");
+    //      System.out.println("| 정보 수정은 관리자 권한이 필요합니다. |");
+    //      System.out.println("+---------------------------------------+");
+    //      return;
+    //    }
+
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
@@ -28,9 +36,9 @@ public class CatUpdateHandler implements Command {
       stmt.setInt(1, no);
       try (ResultSet rs = stmt.executeQuery()) {
         if (!rs.next()) {
-          System.out.println("+------------------------------+");
-          System.out.println("| 해당 번호의 회원이 없습니다. |");
-          System.out.println("+------------------------------+");
+          System.out.println("+--------------------------------+");
+          System.out.println("| 해당 번호의 고양이가 없습니다. |");
+          System.out.println("+--------------------------------+");
           return;
         }
 
@@ -45,7 +53,7 @@ public class CatUpdateHandler implements Command {
       String input = Prompt.inputString("| 정말 변경하시겠습니까?(y/N) ");
       if (!input.equalsIgnoreCase("Y")) {
         System.out.println("+-----------------------------+");
-        System.out.println("| 회원 변경을 취소하였습니다. |");
+        System.out.println("| 상태 변경을 취소하였습니다. |");
         System.out.println("+-----------------------------+");
         return;
       }
@@ -55,7 +63,7 @@ public class CatUpdateHandler implements Command {
       stmt2.executeUpdate();
 
       System.out.println("+------------------------+");
-      System.out.println("| 회원을 변경하였습니다. |");
+      System.out.println("| 상태를 변경하였습니다. |");
       System.out.println("+------------------------+");
     }
   }

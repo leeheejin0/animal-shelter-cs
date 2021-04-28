@@ -1,39 +1,46 @@
 package com.leeheejin.pms.handler;
 
-import java.sql.Date;
-import com.leeheejin.driver.Statement;
-import com.leeheejin.pms.domain.Member;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import com.leeheejin.pms.domain.Manager;
 import com.leeheejin.util.Prompt;
 
 public class ManagerAddHandler implements Command {
 
-  Statement stmt;
-
-  public ManagerAddHandler (Statement stmt) {
-    this.stmt = stmt;
-  }
-
   @Override
-  public void service() {
-    System.out.println("[ 홈 > 회원가입* ]");
-    try {
-      Member m = new Member();
-      m.setNo(memberList.size() + 1);
-      m.setId(Prompt.inputString("아이디: "));
-      m.setName(Prompt.inputString("이름: "));
-      m.setEmail(Prompt.inputString("이메일: "));
-      m.setTel(Prompt.inputString("전화번호: "));
-      m.setPassword(Prompt.inputString("비밀번호: "));
-      m.setRegisteredDate(new Date(System.currentTimeMillis()));
+  public void service() throws Exception {
+    System.out.println("+-+-+ 관리자 등록 +-+-+");
 
-      memberList.add(m);
+    Manager m = new Manager();
 
-      System.out.println("- 가입이 완료되었습니다. ");
-    } catch (Exception e) {
-      System.out.println("---------------------");
-      System.out.println(" 잘못된 입력입니다. ");
-      System.out.println("---------------------");
+    m.setId(Prompt.inputString("| 아이디? "));
+    m.setPassword(Prompt.inputString("| 비밀번호? "));
+    m.setName(Prompt.inputString("| 이름? "));
+    m.setEmail(Prompt.inputString("| 이메일? "));
+    m.setTel(Prompt.inputString("| 전화번호? "));
+
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        PreparedStatement stmt = con.prepareStatement(
+            "insert into pms_manager(id,name,email,tel,password) values(?,?,?,?,password(?))");) {
+
+      stmt.setString(1, m.getId());
+      stmt.setString(2, m.getName());
+      stmt.setString(3, m.getEmail());
+      stmt.setString(4, m.getTel());
+      stmt.setString(5, m.getPassword());
+
+      stmt.executeUpdate();
+      System.out.println("+--------------------------+");
+      System.out.println("| 관리자를 등록하였습니다. |");
+      System.out.println("+--------------------------+");
     }
-    System.out.println();
   }
 }
+
+
+
+
+
+

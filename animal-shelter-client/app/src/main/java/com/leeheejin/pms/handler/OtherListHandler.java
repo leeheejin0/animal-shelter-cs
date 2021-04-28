@@ -14,7 +14,7 @@ public class OtherListHandler implements Command {
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
-            "select id,species,photo,breed,age,status from pms_animal_dog order by id asc");
+            "select id,species,photo,breed,age,status from pms_animal_othr order by id asc");
         ResultSet rs = stmt.executeQuery()) {
       System.out.println("+");
       while (rs.next()) {

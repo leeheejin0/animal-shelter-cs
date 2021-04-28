@@ -33,7 +33,7 @@ public class OtherAddHandler implements Command {
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
-            "insert into pms_animal_other(species,photo,breed,gender,age,date,place) values(?,?,?,?,?,?,?)");) {
+            "insert into pms_animal_othr(species,photo,breed,gender,age,date,place) values(?,?,?,?,?,?,?)");) {
 
       stmt.setString(1, o.getSpecies());
       stmt.setString(2, o.getPhotos());
