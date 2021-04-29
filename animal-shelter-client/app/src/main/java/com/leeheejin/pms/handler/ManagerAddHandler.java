@@ -21,7 +21,7 @@ public class ManagerAddHandler implements Command {
     m.setTel(Prompt.inputString("| 전화번호? "));
 
     try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        "jdbc:mysql://localhost:3306/asdb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
             "insert into pms_manager(id,name,email,tel,password) values(?,?,?,?,password(?))");) {
 

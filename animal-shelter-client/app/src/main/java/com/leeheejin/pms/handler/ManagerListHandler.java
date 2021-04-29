@@ -12,19 +12,17 @@ public class ManagerListHandler implements Command {
     System.out.println("+-+-+ 관리자 목록 +-+-+");
 
     try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        "jdbc:mysql://localhost:3306/asdb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
-            "select id,photo,breed,age,status from pms_manager order by id asc");
+            "select  from pms_manager order by no asc");
         ResultSet rs = stmt.executeQuery()) {
 
       System.out.println("+");
       while (rs.next()) {
-        System.out.printf("%d, %s, %s, %d, %s\n", 
-            rs.getInt("id"), 
-            rs.getString("photo"), 
-            rs.getString("breed"),
-            rs.getInt("age"),
-            rs.getString("status"));
+        System.out.printf("%s, %s, %s\n", 
+            rs.getString("id"), 
+            rs.getString("name"), 
+            rs.getString("email"));
       }
       System.out.println("+");
     }

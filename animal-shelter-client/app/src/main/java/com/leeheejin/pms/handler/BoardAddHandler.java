@@ -19,7 +19,7 @@ public class BoardAddHandler implements Command {
     b.setWriter(Prompt.inputString("| 작성자? "));
 
     try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        "jdbc:mysql://localhost:3306/asdb?user=study&password=1111");
         PreparedStatement stmt =
             con.prepareStatement("insert into pms_board(title, content, writer) values(?,?,?)");) {
 

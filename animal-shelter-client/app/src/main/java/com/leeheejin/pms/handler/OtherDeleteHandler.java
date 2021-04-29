@@ -22,7 +22,7 @@ public class OtherDeleteHandler implements Command {
     }
 
     try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        "jdbc:mysql://localhost:3306/asdb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
             "delete from pms_animal_othr where id=?")) {
 

@@ -12,7 +12,7 @@ public class BoardListHandler implements Command {
     System.out.println("+-+-+ 게시글 목록 +-+-+");
 
     try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        "jdbc:mysql://localhost:3306/asdb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
             "select no,title,writer,cdt,vw_cnt from pms_board order by no desc");
         ResultSet rs = stmt.executeQuery()) {

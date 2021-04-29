@@ -30,7 +30,7 @@ public class CatAddHandler implements Command {
     c.setPlaces(Prompt.inputString("| 구조장소? "));
 
     try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        "jdbc:mysql://localhost:3306/asdb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
             "insert into pms_animal_cat(photo,breed,gender,age,date,place) values(?,?,?,?,?,?)");) {
 
