@@ -73,48 +73,48 @@ public class ClientApp {
 
     MemberValidator memberValidator = new MemberValidator();
 
-    commandMap.put("board/add", new BoardAddHandler(memberValidator));
-    commandMap.put("board/list", new BoardListHandler());
-    commandMap.put("board/detail", new BoardDetailHandler());
-    commandMap.put("board/update", new BoardUpdateHandler());
-    commandMap.put("board/delete", new BoardDeleteHandler());
-    commandMap.put("board/search", new BoardSearchHandler());
+    commandMap.put("/board/add", new BoardAddHandler(memberValidator));
+    commandMap.put("/board/list", new BoardListHandler());
+    commandMap.put("/board/detail", new BoardDetailHandler());
+    commandMap.put("/board/update", new BoardUpdateHandler());
+    commandMap.put("/board/delete", new BoardDeleteHandler());
+    commandMap.put("/board/search", new BoardSearchHandler());
 
-    commandMap.put("member/join", new MemberAddHandler());
-    commandMap.put("member/signout", new MemberDeleteHandler());
-    commandMap.put("member/update", new MemberUpdateHandler());
-    commandMap.put("member/list", new MemberListHandler());
-    commandMap.put("member/detail", new MemberDetailHandler());
-    //    commandMap.put("manager/login", new ManagerLoginHandler());
-    //    commandMap.put("manager/logout", new ManagerLogoutHandler());
+    commandMap.put("/member/join", new MemberAddHandler());
+    commandMap.put("/member/signout", new MemberDeleteHandler());
+    commandMap.put("/member/update", new MemberUpdateHandler());
+    commandMap.put("/member/list", new MemberListHandler());
+    commandMap.put("/member/detail", new MemberDetailHandler());
+    //    commandMap.put("/member/login", new MemberLoginHandler());
+    //    commandMap.put("/member/logout", new MemberLogoutHandler());
 
-    commandMap.put("manager/join", new ManagerAddHandler());
-    commandMap.put("manager/signout", new ManagerDeleteHandler());
-    commandMap.put("member/update", new ManagerUpdateHandler());
-    commandMap.put("member/list", new ManagerListHandler());
-    commandMap.put("member/detail", new ManagerDetailHandler());
-    //    commandMap.put("manager/login", new ManagerLoginHandler());
-    //    commandMap.put("manager/logout", new ManagerLogoutHandler());
+    commandMap.put("/manager/join", new ManagerAddHandler());
+    commandMap.put("/manager/signout", new ManagerDeleteHandler());
+    commandMap.put("/manager/update", new ManagerUpdateHandler());
+    commandMap.put("/manager/list", new ManagerListHandler());
+    commandMap.put("/manager/detail", new ManagerDetailHandler());
+    //    commandMap.put("/manager/login", new ManagerLoginHandler());
+    //    commandMap.put("/manager/logout", new ManagerLogoutHandler());
 
     ManagerValidator managerValidator = new ManagerValidator();
 
-    commandMap.put("cat/add", new CatAddHandler(managerValidator));
-    commandMap.put("cat/list", new CatListHandler());
-    commandMap.put("cat/detail", new CatDetailHandler());
-    commandMap.put("cat/update", new CatUpdateHandler());
-    commandMap.put("cat/delete", new CatDeleteHandler());
+    commandMap.put("/cat/add", new CatAddHandler(managerValidator));
+    commandMap.put("/cat/list", new CatListHandler());
+    commandMap.put("/cat/detail", new CatDetailHandler());
+    commandMap.put("/cat/update", new CatUpdateHandler());
+    commandMap.put("/cat/delete", new CatDeleteHandler());
 
-    commandMap.put("dog/add", new DogAddHandler(managerValidator));
-    commandMap.put("dog/list", new DogListHandler());
-    commandMap.put("dog/detail", new DogDetailHandler());
-    commandMap.put("dog/update", new DogUpdateHandler());
-    commandMap.put("dog/delete", new DogDeleteHandler());
+    commandMap.put("/dog/add", new DogAddHandler(managerValidator));
+    commandMap.put("/dog/list", new DogListHandler());
+    commandMap.put("/dog/detail", new DogDetailHandler());
+    commandMap.put("/dog/update", new DogUpdateHandler());
+    commandMap.put("/dog/delete", new DogDeleteHandler());
 
-    commandMap.put("other/add", new OtherAddHandler(managerValidator));
-    commandMap.put("other/list", new OtherListHandler());
-    commandMap.put("other/detail", new OtherDetailHandler());
-    commandMap.put("other/update", new OtherUpdateHandler());
-    commandMap.put("other/delete", new OtherDeleteHandler());
+    commandMap.put("/other/add", new OtherAddHandler(managerValidator));
+    commandMap.put("/other/list", new OtherListHandler());
+    commandMap.put("/other/detail", new OtherDetailHandler());
+    commandMap.put("/other/update", new OtherUpdateHandler());
+    commandMap.put("/other/delete", new OtherDeleteHandler());
 
     try {
 

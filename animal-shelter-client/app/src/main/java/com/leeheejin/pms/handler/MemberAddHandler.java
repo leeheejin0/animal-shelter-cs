@@ -32,9 +32,9 @@ public class MemberAddHandler implements Command {
       stmt.setString(5, m.getPassword());
 
       stmt.executeUpdate();
-      System.out.println("+--------------------------+");
-      System.out.println("| 관리자를 등록하였습니다. |");
-      System.out.println("+--------------------------+");
+      System.out.println("+------------------------+");
+      System.out.println("| 회원을 등록하였습니다. |");
+      System.out.println("+------------------------+");
     }
   }
 }
