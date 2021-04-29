@@ -9,12 +9,12 @@ public class ManagerListHandler implements Command {
 
   @Override
   public void service() throws Exception {
-    System.out.println("+-+-+ 고양이 구조목록 +-+-+");
+    System.out.println("+-+-+ 관리자 목록 +-+-+");
 
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
-            "select id,photo,breed,age,status from pms_animal_cat order by id asc");
+            "select id,photo,breed,age,status from pms_manager order by id asc");
         ResultSet rs = stmt.executeQuery()) {
 
       System.out.println("+");
