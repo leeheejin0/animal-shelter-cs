@@ -57,7 +57,9 @@ public class ManagerUpdateHandler implements Command {
       stmt2.setInt(6, m.getNo());
       stmt2.executeUpdate();
 
-      System.out.println("회원을 변경하였습니다.");
+      System.out.println("+--------------------------+");
+      System.out.println("| 매니저를 변경하였습니다. |");
+      System.out.println("+--------------------------+");
     }
   }
 }

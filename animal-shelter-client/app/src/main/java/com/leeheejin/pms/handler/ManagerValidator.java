@@ -8,7 +8,7 @@ import com.leeheejin.util.Prompt;
 
 public class ManagerValidator {
 
-  public String inputMember(String promptTitle) throws Exception {
+  public String inputManager(String promptTitle) throws Exception {
 
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/asdb?user=study&password=1111");

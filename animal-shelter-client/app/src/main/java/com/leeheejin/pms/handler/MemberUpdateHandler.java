@@ -1,71 +1,71 @@
 package com.leeheejin.pms.handler;
 
-import java.util.List;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import com.leeheejin.pms.domain.Member;
 import com.leeheejin.util.Prompt;
 
-public class MemberUpdateHandler extends AbstractMemberHandler {
-
-  public MemberUpdateHandler(List<Member> memberList) {
-    super(memberList);
-  }
+public class MemberUpdateHandler implements Command {
 
   @Override
-  public void service() {
-    System.out.println("[ 홈 > 관리자 메뉴 > 회원정보수정* ]");
-    Member m = memberList.get(logInAccount);
-    System.out.printf("[ %s | %s ] %s | %s | %s (%s)\n", 
-        m.getId(), m.getPassword(), m.getName(), m.getEmail(), 
-        m.getTel(), m.getRegisteredDate());
+  public void service() throws Exception {
+    System.out.println("+-+-+ 회원 변경 +-+-+");
 
-    int command = Prompt.inputInt("1: 상태수정 | 2: 회원탈퇴 | 3: 뒤로가기\n>> ");
-    switch (command) {
-      case 1:
-        try {
-          String id = Prompt.inputString("아이디: ");
-          String password = Prompt.inputString("비밀번호: ");
-          String name = Prompt.inputString("이름: ");
-          String email = Prompt.inputString("이메일: ");
-          String tel = Prompt.inputString("전화번호: ");
+    int no = Prompt.inputInt("| 번호? ");
 
-          m.setId(id);
-          m.setPassword(password);
-          m.setName(name);
-          m.setEmail(email);
-          m.setTel(tel);
-          System.out.printf("[ %s | %s ] %s | %s | %s (%s)\n", 
-              m.getId(), m.getPassword(), m.getName(), m.getEmail(), 
-              m.getTel(), m.getRegisteredDate());
-          System.out.println("- 회원정보가 변경되었습니다. ");
-        } catch (Exception e) {
-          System.out.println("---------------------");
-          System.out.println(" 잘못된 입력입니다. ");
-          System.out.println("---------------------");
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/asdb?user=study&password=1111");
+        PreparedStatement stmt = con.prepareStatement(
+            "select * from pms_member where no = ?");
+        PreparedStatement stmt2 = con.prepareStatement(
+            "update pms_member set id=?,name=?,email=?,tel=?,password=password(?),tel=? where no=?")) {
+
+      Member mem = new Member();
+
+      // 1) 기존 데이터 조회
+      stmt.setInt(1, no);
+      try (ResultSet rs = stmt.executeQuery()) {
+        if (!rs.next()) {
+          System.out.println("+------------------------------+");
+          System.out.println("| 해당 번호의 회원이 없습니다. |");
+          System.out.println("+------------------------------+");
+          return;
         }
-        break;
-      case 2:
-        String dcommand = Prompt.inputString("- 회원정보를 삭제하시겠습니까?(y/N) ");
-        if (dcommand.isEmpty() || dcommand.equalsIgnoreCase("n")) {
-          System.out.println("- 회원정보 삭제가 취소되었습니다. ");
-          System.out.println();
-          break;
-        } else if (dcommand.equalsIgnoreCase("y")) {
-          memberList.remove(m);
-          System.out.println("- 회원정보가 삭제되었습니다. ");
-          System.out.println();
-          accountRemove = -1;
-        } else {
-          System.out.println("- 잘못 입력하셨습니다. ");
-          System.out.println();
-        }
-        break;
-      case 3:
-        return;
-      default:
-        System.out.println("실행할 수 없는 명령입니다.");
-        System.out.println();
-        break;
+
+        mem.setNo(no); 
+        mem.setId(rs.getString("id"));
+        mem.setName(rs.getString("name"));
+        mem.setEmail(rs.getString("email"));
+        mem.setTel(rs.getString("tel"));
+      }
+
+      // 2) 사용자에게서 변경할 데이터를 입력 받는다.
+      mem.setId(Prompt.inputString(String.format("| 아이디(%s)? ", mem.getId())));
+      mem.setName(Prompt.inputString(String.format("| 이름(%s)? ", mem.getName())));
+      mem.setEmail(Prompt.inputString(String.format("| 이메일(%s)? ", mem.getEmail())));
+      mem.setPassword(Prompt.inputString("| 새암호? "));
+      mem.setTel(Prompt.inputString(String.format("| 전화(%s)? ", mem.getTel())));
+
+      // 3) DBMS에게 데이터 변경을 요청한다.
+      stmt2.setString(1, mem.getId());
+      stmt2.setString(2, mem.getName());
+      stmt2.setString(3, mem.getEmail());
+      stmt2.setString(4, mem.getPassword());
+      stmt2.setString(5, mem.getTel());
+      stmt2.setInt(6, mem.getNo());
+      stmt2.executeUpdate();
+
+      System.out.println("+------------------------+");
+      System.out.println("| 회원을 변경하였습니다. |");
+      System.out.println("+------------------------+");
     }
   }
 }
+
+
+
+
+
 

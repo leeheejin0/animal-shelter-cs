@@ -5,16 +5,16 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class ManagerListHandler implements Command {
+public class MemberListHandler implements Command {
 
   @Override
   public void service() throws Exception {
-    System.out.println("+-+-+ 관리자 목록 +-+-+");
+    System.out.println("+-+-+ 회원 목록 +-+-+");
 
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/asdb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
-            "select id,name,email from pms_manager order by no asc");
+            "select id,name,email from pms_member order by no asc");
         ResultSet rs = stmt.executeQuery()) {
 
       System.out.println("+");

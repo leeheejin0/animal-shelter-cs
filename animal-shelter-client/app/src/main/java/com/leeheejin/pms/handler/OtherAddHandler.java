@@ -8,19 +8,25 @@ import com.leeheejin.util.Prompt;
 
 public class OtherAddHandler implements Command {
 
+  ManagerValidator managerValidator;
+
+  public OtherAddHandler(ManagerValidator managerValidator) {
+    this.managerValidator = managerValidator;
+  }
+
   @Override
   public void service() throws Exception {
     System.out.println("+-+-+ 신규 기타동물 등록 +-+-+");
 
     Other o = new Other();
 
-    //    o.setWriter(managerValidator.inputManager("| 작성자 이름? "));
-    //    if (o.getWriter() == null) {
-    //      System.out.println("+---------------------------------------+");
-    //      System.out.println("| 동물 등록은 관리자 권한이 필요합니다. |");
-    //      System.out.println("+---------------------------------------+");
-    //      return;
-    //    }
+    o.setWriter(managerValidator.inputManager("| 작성자 이름? "));
+    if (o.getWriter() == null) {
+      System.out.println("+---------------------------------------+");
+      System.out.println("| 동물 등록은 관리자 권한이 필요합니다. |");
+      System.out.println("+---------------------------------------+");
+      return;
+    }
 
     o.setSpecies(Prompt.inputString("| 동물 종류? "));
     o.setPhotos(Prompt.inputString("| 사진? "));

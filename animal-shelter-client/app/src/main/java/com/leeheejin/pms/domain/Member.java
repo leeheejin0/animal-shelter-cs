@@ -3,11 +3,6 @@ package com.leeheejin.pms.domain;
 import java.sql.Date;
 
 public class Member {
-  @Override
-  public String toString() {
-    return "Member [no=" + no + ", id=" + id + ", name=" + name + ", email=" + email + ", tel="
-        + tel + ", password=" + password + ", registeredDate=" + registeredDate + "]";
-  }
   private int no;
   private String id;
   private String name;
@@ -15,6 +10,11 @@ public class Member {
   private String tel;
   private String password;
   private Date registeredDate;
+  @Override
+  public String toString() {
+    return "Member [no=" + no + ", id=" + id + ", name=" + name + ", email=" + email + ", tel="
+        + tel + ", password=" + password + ", registeredDate=" + registeredDate + "]";
+  }
 
   public int getNo() {
     return no;

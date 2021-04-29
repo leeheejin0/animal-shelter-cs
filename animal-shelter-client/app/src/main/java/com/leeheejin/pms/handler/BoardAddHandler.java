@@ -8,6 +8,12 @@ import com.leeheejin.util.Prompt;
 
 public class BoardAddHandler implements Command {
 
+  MemberValidator memberValidator;
+
+  public BoardAddHandler(MemberValidator memberValidator) {
+    this.memberValidator = memberValidator;
+  }
+
   @Override
   public void service() throws Exception {
     System.out.println("+-+-+ 게시글 등록 +-+-+");
@@ -16,7 +22,13 @@ public class BoardAddHandler implements Command {
 
     b.setTitle(Prompt.inputString("| 제목? "));
     b.setContent(Prompt.inputString("| 내용? "));
-    b.setWriter(Prompt.inputString("| 작성자? "));
+    b.setWriter(memberValidator.inputMember("| 작성자 이름? "));
+    if (b.getWriter() == null) {
+      System.out.println("+----------------------------------+");
+      System.out.println("| 게시글 등록은 회원만 가능합니다. |");
+      System.out.println("+----------------------------------+");
+      return;
+    }
 
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/asdb?user=study&password=1111");
