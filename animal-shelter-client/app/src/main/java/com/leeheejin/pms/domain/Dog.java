@@ -78,4 +78,14 @@ public class Dog {
   public void setStatus(String status) {
     this.status = status;
   }
+  public static String getStatusLabel(int status) {
+    switch (status) {
+      case 1:
+        return "공고중";
+      case 2:
+        return "입양완료";
+      default:
+        return "신규";
+    }
+  }
 }
