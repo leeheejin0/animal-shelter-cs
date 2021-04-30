@@ -11,8 +11,7 @@ public class Dog {
   private Date dates;
   private String places;
   private String status;
-  private String writer;
-
+  private int writer;
 
   @Override
   public String toString() {
@@ -21,13 +20,12 @@ public class Dog {
         + ", writer=" + writer + "]";
   }
 
-
-  public String getWriter() {
+  public int getWriter() {
     return writer;
   }
 
 
-  public void setWriter(String writer) {
+  public void setWriter(int writer) {
     this.writer = writer;
   }
 

@@ -11,7 +11,9 @@ public class Cat {
   private Date dates;
   private String places;
   private String status;
-  private String writer;
+  private int writer;
+
+
 
   @Override
   public String toString() {
@@ -19,11 +21,10 @@ public class Cat {
         + ", ages=" + ages + ", dates=" + dates + ", places=" + places + ", status=" + status
         + ", writer=" + writer + "]";
   }
-
-  public String getWriter() {
+  public int getWriter() {
     return writer;
   }
-  public void setWriter(String writer) {
+  public void setWriter(int writer) {
     this.writer = writer;
   }
   public int getIds() {

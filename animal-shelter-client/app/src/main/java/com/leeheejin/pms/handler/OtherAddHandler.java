@@ -39,7 +39,7 @@ public class OtherAddHandler implements Command {
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/asdb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
-            "insert into pms_animal_othr(species,photo,breed,gender,age,date,place) values(?,?,?,?,?,?,?)");) {
+            "insert into pms_animal_othr(species,photo,breed,gender,age,rdt,place,writer) values(?,?,?,?,?,?,?,?)");) {
 
       stmt.setString(1, o.getSpecies());
       stmt.setString(2, o.getPhotos());
@@ -48,6 +48,7 @@ public class OtherAddHandler implements Command {
       stmt.setInt(5, o.getAges());
       stmt.setDate(6, o.getDates());
       stmt.setString(7, o.getPlaces());
+      stmt.setString(7, o.getWriter());
       stmt.executeUpdate();
       System.out.println("+---------------------------------+");
       System.out.println("| 신규 기타동물을 등록하였습니다. |");

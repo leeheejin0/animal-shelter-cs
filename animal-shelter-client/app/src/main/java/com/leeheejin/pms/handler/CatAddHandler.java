@@ -38,7 +38,7 @@ public class CatAddHandler implements Command {
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/asdb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
-            "insert into pms_animal_cat(photo,breed,gender,age,date,place) values(?,?,?,?,?,?)");) {
+            "insert into pms_animal_cat(photo,breed,gender,age,rdt,place,writer) values(?,?,?,?,?,?,?)");) {
 
       stmt.setString(1, c.getPhotos());
       stmt.setString(2, c.getBreeds());
@@ -46,6 +46,7 @@ public class CatAddHandler implements Command {
       stmt.setInt(4, c.getAges());
       stmt.setDate(5, c.getDates());
       stmt.setString(6, c.getPlaces());
+      stmt.setString(7, c.getWriter());
       stmt.executeUpdate();
       System.out.println("+-------------------------------+");
       System.out.println("| 신규 고양이를 등록하였습니다. |");

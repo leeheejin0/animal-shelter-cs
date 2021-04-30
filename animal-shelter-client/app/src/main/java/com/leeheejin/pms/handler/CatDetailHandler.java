@@ -33,7 +33,7 @@ public class CatDetailHandler implements Command {
         System.out.printf("| 품종: %s\n", rs.getString("breed"));
         System.out.printf("| 성별: %s\n", rs.getString("gender"));
         System.out.printf("| 나이: %s\n", rs.getString("age"));
-        System.out.printf("| 구조일: %s\n", rs.getDate("date"));
+        System.out.printf("| 구조일: %s\n", rs.getDate("rdt"));
         System.out.printf("| 구조장소: %s\n", rs.getString("place"));
         System.out.printf("| 상태: %s\n", rs.getString("status"));
         System.out.println("+");
