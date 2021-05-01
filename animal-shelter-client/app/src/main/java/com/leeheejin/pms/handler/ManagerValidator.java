@@ -4,11 +4,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import com.leeheejin.pms.domain.Manager;
 import com.leeheejin.util.Prompt;
 
 public class ManagerValidator {
 
-  public String inputManager(String promptTitle) throws Exception {
+  public Manager inputManager(String promptTitle) throws Exception {
 
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/asdb?user=study&password=1111");

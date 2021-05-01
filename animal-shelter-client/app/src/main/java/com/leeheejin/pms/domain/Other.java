@@ -12,7 +12,7 @@ public class Other {
   private Date dates;
   private String places;
   private String status;
-  private int writer;
+  private Manager writer;
 
 
   @Override
@@ -23,12 +23,12 @@ public class Other {
   }
 
 
-  public int getWriter() {
+  public Manager getWriter() {
     return writer;
   }
 
 
-  public void setWriter(int writer) {
+  public void setWriter(Manager writer) {
     this.writer = writer;
   }
 

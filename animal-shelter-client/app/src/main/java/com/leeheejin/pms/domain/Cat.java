@@ -11,7 +11,7 @@ public class Cat {
   private Date dates;
   private String places;
   private String status;
-  private int writer;
+  private Manager writer;
 
 
 
@@ -21,10 +21,10 @@ public class Cat {
         + ", ages=" + ages + ", dates=" + dates + ", places=" + places + ", status=" + status
         + ", writer=" + writer + "]";
   }
-  public int getWriter() {
+  public Manager getWriter() {
     return writer;
   }
-  public void setWriter(int writer) {
+  public void setWriter(Manager writer) {
     this.writer = writer;
   }
   public int getIds() {
