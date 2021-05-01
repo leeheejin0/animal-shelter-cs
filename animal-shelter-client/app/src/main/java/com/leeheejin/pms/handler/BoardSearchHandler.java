@@ -23,7 +23,7 @@ public class BoardSearchHandler implements Command {
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/asdb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
-            "select no,title,writer,cdt,vw_cnt"
+            "select no,title,writer,rdt,vw_cnt"
                 + " from pms_board"
                 + " where title like concat('%',?,'%')"
                 + " or content like concat('%',?,'%')"
@@ -48,7 +48,7 @@ public class BoardSearchHandler implements Command {
               rs.getInt("no"), 
               rs.getString("title"), 
               rs.getString("writer"),
-              rs.getDate("cdt"),
+              rs.getDate("rdt"),
               rs.getInt("vw_cnt"));
         } while (rs.next());
         System.out.println("+");

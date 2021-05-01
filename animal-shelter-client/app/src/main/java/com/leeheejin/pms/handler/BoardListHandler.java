@@ -14,7 +14,7 @@ public class BoardListHandler implements Command {
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/asdb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
-            "select no,title,writer,cdt,vw_cnt from pms_board order by no desc");
+            "select no,title,writer,rdt,vw_cnt from pms_board order by no desc");
         ResultSet rs = stmt.executeQuery()) {
 
       System.out.println("+");
@@ -23,7 +23,7 @@ public class BoardListHandler implements Command {
             rs.getInt("no"), 
             rs.getString("title"), 
             rs.getString("writer"),
-            rs.getDate("cdt"),
+            rs.getDate("rdt"),
             rs.getInt("vw_cnt"));
       }
       System.out.println("+");

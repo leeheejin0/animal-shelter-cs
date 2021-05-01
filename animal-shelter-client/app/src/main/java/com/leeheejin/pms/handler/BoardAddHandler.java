@@ -37,7 +37,7 @@ public class BoardAddHandler implements Command {
 
       stmt.setString(1, b.getTitle());
       stmt.setString(2, b.getContent());
-      stmt.setString(3, b.getWriter());
+      stmt.setInt(3, b.getWriter().getNo());
 
       stmt.executeUpdate();
       System.out.println("+--------------------------+");
