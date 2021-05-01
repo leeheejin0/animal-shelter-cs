@@ -48,7 +48,7 @@ public class OtherAddHandler implements Command {
       stmt.setInt(5, o.getAges());
       stmt.setDate(6, o.getDates());
       stmt.setString(7, o.getPlaces());
-      stmt.setString(7, o.getWriter());
+      stmt.setInt(8, o.getWriter().getNo());
       stmt.executeUpdate();
       System.out.println("+---------------------------------+");
       System.out.println("| 신규 기타동물을 등록하였습니다. |");

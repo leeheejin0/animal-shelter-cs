@@ -46,7 +46,7 @@ public class DogAddHandler implements Command {
       stmt.setInt(4, d.getAges());
       stmt.setDate(5, d.getDates());
       stmt.setString(6, d.getPlaces());
-      stmt.setString(7, d.getWriter());
+      stmt.setInt(7, d.getWriter().getNo());
       stmt.executeUpdate();
       System.out.println("+---------------------------+");
       System.out.println("| 신규 개를 등록하였습니다. |");

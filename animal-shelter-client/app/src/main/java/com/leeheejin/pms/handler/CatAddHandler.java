@@ -46,7 +46,7 @@ public class CatAddHandler implements Command {
       stmt.setInt(4, c.getAges());
       stmt.setDate(5, c.getDates());
       stmt.setString(6, c.getPlaces());
-      stmt.setString(7, c.getWriter());
+      stmt.setInt(7, c.getWriter().getNo());
       stmt.executeUpdate();
       System.out.println("+-------------------------------+");
       System.out.println("| 신규 고양이를 등록하였습니다. |");

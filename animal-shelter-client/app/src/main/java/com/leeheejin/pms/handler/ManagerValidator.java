@@ -26,7 +26,11 @@ public class ManagerValidator {
         try (ResultSet rs = stmt.executeQuery()) {
           rs.next();
           if (rs.getInt(1) > 0) {
-            return name;
+            Manager manager = new Manager();
+            manager.setNo(rs.getInt("no"));
+            manager.setName(rs.getString("name"));
+            manager.setEmail(rs.getString("email"));
+            return manager;
           }
           System.out.println("+-----------------------------+");
           System.out.println("| 등록되지 않은 관리자입니다. |");
