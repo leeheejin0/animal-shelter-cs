@@ -15,54 +15,44 @@ public class MemberDao {
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/asdb?user=study&password=1111");
         PreparedStatement stmt =
-            con.prepareStatement("insert into pms_board(title, content, writer) values(?,?,?)");) {
+            con.prepareStatement("insert into pms_member(name,id,password,email,tel,photo) values(?,?,?,?,?,?)");) {
 
-      stmt.setString(1, board.getTitle());
-      stmt.setString(2, board.getContent());
-      stmt.setInt(3, board.getWriter().getNo());
+      stmt.setString(1, member.getName());
+      stmt.setString(2, member.getId());
+      stmt.setString(3, member.getPassword());
+      stmt.setString(4, member.getEmail());
+      stmt.setString(5, member.getTel());
+      stmt.setString(6, member.getPhoto());
 
       return stmt.executeUpdate();
     } 
   }
 
-  public static List<Board> findAll() throws Exception {
-    ArrayList<Board> list = new ArrayList<>();
+  public static List<Member> findAll() throws Exception {
+    ArrayList<Member> list = new ArrayList<>();
 
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/asdb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
-            "select"
-                + " b.no,"
-                + " b.title,"
-                + " b.rdt,"
-                + " b.vw_cnt,"
-                + " b.like_cnt,"
-                + " m.no as writer_no,"
-                + " m.name as writer_name"
-                + " from pms_board b"
-                + "   inner join pms_member m on m.no=b.writer"
-                + " order by b.no desc");
+            "select no,name,id,email,photo,tel from pms_member order by name asc");
         ResultSet rs = stmt.executeQuery()) {
 
       while (rs.next()) {
-        Board board = new Board();
-        board.setNo(rs.getInt("no"));
-        board.setTitle(rs.getString("title"));
-        board.setRegisteredDate(rs.getDate("rdt"));
-        board.setViewCount(rs.getInt("vw_cnt"));
+        Member m = new Member();
+        m.setNo(rs.getInt("no"));
+        m.setId(rs.getString("id"));
+        m.setName(rs.getString("name"));
+        m.setEmail(rs.getString("email"));
+        m.setPhoto(rs.getString("photo"));
+        m.setTel(rs.getString("tel"));
 
-        Member writer = new Member();
-        writer.setNo(rs.getInt("writer_no"));
-        writer.setName(rs.getString("writer_name"));
-        board.setWriter(writer);
-
-        list.add(board);
+        list.add(m);
       }
     }
     return list;
   }
 
-  public static Board findByNo(int no) throws Exception {
+  public static Member findByNo(int no) throws Exception {
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
@@ -86,7 +76,7 @@ public class MemberDao {
           return null;
         }
 
-        Board board = new Board();
+        Member board = new Member();
         board.setNo(rs.getInt("no"));
         board.setTitle(rs.getString("title"));
         board.setContent(rs.getString("content"));
@@ -104,7 +94,7 @@ public class MemberDao {
     }
   }
 
-  public static int update(Board board) throws Exception {
+  public static int update(Member member) throws Exception {
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
@@ -137,8 +127,8 @@ public class MemberDao {
     }
   }
 
-  public static List<Board> findByKeyword(String keyword) throws Exception {
-    ArrayList<Board> list = new ArrayList<>();
+  public static List<Member> findByKeyword(String keyword) throws Exception {
+    ArrayList<Member> list = new ArrayList<>();
 
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
