@@ -141,12 +141,12 @@ public class BoardDao {
     ArrayList<Board> list = new ArrayList<>();
 
     try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        "jdbc:mysql://localhost:3306/asdb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
             "select"
                 + " b.no,"
                 + " b.title,"
-                + " b.cdt,"
+                + " b.rdt,"
                 + " b.vw_cnt,"
                 + " b.like_cnt,"
                 + " m.no as writer_no,"
@@ -168,7 +168,7 @@ public class BoardDao {
         Board board = new Board();
         board.setNo(rs.getInt("no"));
         board.setTitle(rs.getString("title"));
-        board.setRegisteredDate(rs.getDate("cdt"));
+        board.setRegisteredDate(rs.getDate("rdt"));
         board.setViewCount(rs.getInt("vw_cnt"));
 
         Member writer = new Member();
