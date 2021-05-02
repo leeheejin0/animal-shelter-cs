@@ -14,12 +14,13 @@ public class ManagerListHandler implements Command {
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/asdb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
-            "select id,name,email from pms_manager order by no asc");
+            "select no,id,name,email from pms_manager order by no asc");
         ResultSet rs = stmt.executeQuery()) {
 
       System.out.println("+");
       while (rs.next()) {
-        System.out.printf("%s, %s, %s\n", 
+        System.out.printf("%d, %s, %s, %s\n", 
+            rs.getInt("no"),
             rs.getString("id"), 
             rs.getString("name"), 
             rs.getString("email"));

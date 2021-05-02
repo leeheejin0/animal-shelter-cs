@@ -20,7 +20,7 @@ public class ManagerUpdateHandler implements Command {
         PreparedStatement stmt = con.prepareStatement(
             "select * from pms_manager where no = ?");
         PreparedStatement stmt2 = con.prepareStatement(
-            "update pms_manager set id=?,name=?,email=?,tel=?,password=password(?),tel=? where no=?")) {
+            "update pms_manager set id=?,name=?,email=?,photo=?,password=password(?),tel=? where no=?")) {
 
       Manager m = new Manager();
 
@@ -38,6 +38,7 @@ public class ManagerUpdateHandler implements Command {
         m.setId(rs.getString("id"));
         m.setName(rs.getString("name"));
         m.setEmail(rs.getString("email"));
+        m.setPhoto(rs.getString("photo"));
         m.setTel(rs.getString("tel"));
       }
 
@@ -45,6 +46,7 @@ public class ManagerUpdateHandler implements Command {
       m.setId(Prompt.inputString(String.format("| 아이디(%s)? ", m.getId())));
       m.setName(Prompt.inputString(String.format("| 이름(%s)? ", m.getName())));
       m.setEmail(Prompt.inputString(String.format("| 이메일(%s)? ", m.getEmail())));
+      m.setPhoto(Prompt.inputString(String.format("| 사진(%s)? ", m.getPhoto())));
       m.setPassword(Prompt.inputString("| 새암호? "));
       m.setTel(Prompt.inputString(String.format("| 전화(%s)? ", m.getTel())));
 
@@ -52,9 +54,10 @@ public class ManagerUpdateHandler implements Command {
       stmt2.setString(1, m.getId());
       stmt2.setString(2, m.getName());
       stmt2.setString(3, m.getEmail());
-      stmt2.setString(4, m.getPassword());
-      stmt2.setString(5, m.getTel());
-      stmt2.setInt(6, m.getNo());
+      stmt2.setString(4, m.getPhoto());
+      stmt2.setString(5, m.getPassword());
+      stmt2.setString(6, m.getTel());
+      stmt2.setInt(7, m.getNo());
       stmt2.executeUpdate();
 
       System.out.println("+--------------------------+");

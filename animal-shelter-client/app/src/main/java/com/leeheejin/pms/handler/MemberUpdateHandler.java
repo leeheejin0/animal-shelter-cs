@@ -20,7 +20,7 @@ public class MemberUpdateHandler implements Command {
         PreparedStatement stmt = con.prepareStatement(
             "select * from pms_member where no = ?");
         PreparedStatement stmt2 = con.prepareStatement(
-            "update pms_member set id=?,name=?,email=?,tel=?,password=password(?),tel=? where no=?")) {
+            "update pms_member set id=?,name=?,email=?,photo=?,password=password(?),tel=? where no=?")) {
 
       Member mem = new Member();
 
@@ -38,6 +38,7 @@ public class MemberUpdateHandler implements Command {
         mem.setId(rs.getString("id"));
         mem.setName(rs.getString("name"));
         mem.setEmail(rs.getString("email"));
+        mem.setPhoto(rs.getString("photo"));
         mem.setTel(rs.getString("tel"));
       }
 
@@ -45,6 +46,7 @@ public class MemberUpdateHandler implements Command {
       mem.setId(Prompt.inputString(String.format("| 아이디(%s)? ", mem.getId())));
       mem.setName(Prompt.inputString(String.format("| 이름(%s)? ", mem.getName())));
       mem.setEmail(Prompt.inputString(String.format("| 이메일(%s)? ", mem.getEmail())));
+      mem.setPhoto(Prompt.inputString(String.format("| 사진(%s)? ", mem.getPhoto())));
       mem.setPassword(Prompt.inputString("| 새암호? "));
       mem.setTel(Prompt.inputString(String.format("| 전화(%s)? ", mem.getTel())));
 
@@ -52,9 +54,10 @@ public class MemberUpdateHandler implements Command {
       stmt2.setString(1, mem.getId());
       stmt2.setString(2, mem.getName());
       stmt2.setString(3, mem.getEmail());
-      stmt2.setString(4, mem.getPassword());
-      stmt2.setString(5, mem.getTel());
-      stmt2.setInt(6, mem.getNo());
+      stmt2.setString(4, mem.getPhoto());
+      stmt2.setString(5, mem.getPassword());
+      stmt2.setString(6, mem.getTel());
+      stmt2.setInt(7, mem.getNo());
       stmt2.executeUpdate();
 
       System.out.println("+------------------------+");

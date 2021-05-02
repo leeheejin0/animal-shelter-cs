@@ -18,18 +18,20 @@ public class ManagerAddHandler implements Command {
     m.setPassword(Prompt.inputString("| 비밀번호? "));
     m.setName(Prompt.inputString("| 이름? "));
     m.setEmail(Prompt.inputString("| 이메일? "));
+    m.setPhoto(Prompt.inputString("| 사진? "));
     m.setTel(Prompt.inputString("| 전화번호? "));
 
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/asdb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
-            "insert into pms_manager(id,name,email,tel,password) values(?,?,?,?,password(?))");) {
+            "insert into pms_manager(id,name,email,photo,tel,password) values(?,?,?,?,?,password(?))");) {
 
       stmt.setString(1, m.getId());
       stmt.setString(2, m.getName());
       stmt.setString(3, m.getEmail());
-      stmt.setString(4, m.getTel());
-      stmt.setString(5, m.getPassword());
+      stmt.setString(4, m.getPhoto());
+      stmt.setString(5, m.getTel());
+      stmt.setString(6, m.getPassword());
 
       stmt.executeUpdate();
       System.out.println("+--------------------------+");
