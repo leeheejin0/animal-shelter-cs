@@ -8,18 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 import com.leeheejin.pms.domain.Member;
 
-public class MemberDao {
+public class ManagerDao {
 
   Connection con;
 
-  public MemberDao() throws Exception {
+  public ManagerDao() throws Exception {
     this.con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/asdb?user=study&password=1111");
   }
 
   public int insert(Member member) throws Exception {
     try (PreparedStatement stmt =
-        con.prepareStatement("insert into pms_member(name,id,password,email,tel,photo) values(?,?,?,?,?,?)");) {
+        con.prepareStatement("insert into pms_manager(name,id,password,email,tel,photo) values(?,?,?,?,?,?)");) {
 
       stmt.setString(1, member.getName());
       stmt.setString(2, member.getId());
@@ -36,7 +36,7 @@ public class MemberDao {
     ArrayList<Member> list = new ArrayList<>();
 
     try (PreparedStatement stmt = con.prepareStatement(
-        "select no,name,id,email,photo,tel from pms_member order by name asc");
+        "select no,name,id,email,photo,tel from pms_manager order by name asc");
         ResultSet rs = stmt.executeQuery()) {
 
       while (rs.next()) {
@@ -56,7 +56,7 @@ public class MemberDao {
 
   public Member findByNo(int no) throws Exception {
     try (PreparedStatement stmt = con.prepareStatement(
-        "select * from pms_member where no = ?")) {
+        "select * from pms_manager where no = ?")) {
 
       stmt.setInt(1, no);
 
@@ -80,7 +80,7 @@ public class MemberDao {
 
   public int update(Member member) throws Exception {
     try (PreparedStatement stmt = con.prepareStatement(
-        "update pms_member set name=?,id=?,email=?,password=password(?),photo=?,tel=? where no=?")) {
+        "update pms_manager set name=?,id=?,email=?,password=password(?),photo=?,tel=? where no=?")) {
 
       stmt.setString(1, member.getName());
       stmt.setString(2, member.getId());
@@ -95,7 +95,7 @@ public class MemberDao {
 
   public int delete(int no) throws Exception {
     try (PreparedStatement stmt = con.prepareStatement(
-        "delete from pms_member where no=?")) {
+        "delete from pms_manager where no=?")) {
       stmt.setInt(1, no);
       return stmt.executeUpdate();
     }
@@ -103,7 +103,7 @@ public class MemberDao {
 
   public Member findByName(String name) throws Exception {
     try (PreparedStatement stmt = con.prepareStatement(
-        "select * from pms_member where name=?")) {
+        "select * from pms_manager where name=?")) {
 
       stmt.setString(1, name);
 
