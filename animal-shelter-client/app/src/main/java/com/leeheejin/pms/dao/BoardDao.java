@@ -64,13 +64,13 @@ public class BoardDao {
 
   public static Board findByNo(int no) throws Exception {
     try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        "jdbc:mysql://localhost:3306/asdb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
             "select"
                 + " b.no,"
                 + " b.title,"
                 + " b.content,"
-                + " b.cdt,"
+                + " b.rdt,"
                 + " b.vw_cnt,"
                 + " b.like_cnt,"
                 + " m.no as writer_no,"
@@ -90,7 +90,7 @@ public class BoardDao {
         board.setNo(rs.getInt("no"));
         board.setTitle(rs.getString("title"));
         board.setContent(rs.getString("content"));
-        board.setRegisteredDate(new Date(rs.getTimestamp("cdt").getTime()));
+        board.setRegisteredDate(new Date(rs.getTimestamp("rdt").getTime()));
         board.setViewCount(rs.getInt("vw_cnt"));
         board.setLike(rs.getInt("like_cnt"));
 
@@ -106,7 +106,7 @@ public class BoardDao {
 
   public static int update(Board board) throws Exception {
     try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        "jdbc:mysql://localhost:3306/asdb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
             "update pms_board set title=?, content=? where no=?")) {
 
@@ -119,7 +119,7 @@ public class BoardDao {
 
   public static int updateViewCount(int no) throws Exception {
     try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        "jdbc:mysql://localhost:3306/asdb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
             "update pms_board set vw_cnt=vw_cnt + 1 where no=?")) {
       stmt.setInt(1, no);
@@ -129,7 +129,7 @@ public class BoardDao {
 
   public static int delete(int no) throws Exception {
     try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        "jdbc:mysql://localhost:3306/asdb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
             "delete from pms_board where no=?")) {
       stmt.setInt(1, no);
