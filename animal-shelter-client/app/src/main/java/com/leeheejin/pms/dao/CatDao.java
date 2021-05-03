@@ -37,16 +37,27 @@ public class CatDao {
     ArrayList<Cat> list = new ArrayList<>();
 
     try (PreparedStatement stmt = con.prepareStatement(
-        "select id,photo,breed,age,status from pms_animal_cat order by id asc");
+        "select id,photo,breed,age,status"
+            + " c.id,"
+            + " c.photo,"
+            + " c.breed,"
+            + " c.age,"
+            + " c.status,"
+            + " m.no as writer_no,"
+            + " m.name as writer_name"
+            + " from pms_animal_cat c"
+            + "   inner join pms_manager m on m.no=b.writer"
+            + " order by b.no desc"
+        );
         ResultSet rs = stmt.executeQuery()) {
 
       while (rs.next()) {
         Cat c = new Cat();
-        c.setId(rs.getString("id"));
-        c.setPhoto(rs.getString("photo"));
-        c.setEmail(rs.getString("email"));
-        c.setPhoto(rs.getString("photo"));
-        c.setTel(rs.getString("tel"));
+        c.setIds(rs.getInt("id"));
+        c.setPhotos(rs.getString("photo"));
+        c.setBreeds(rs.getString("email"));
+        c.setAges(rs.getInt("photo"));
+        c.setStatus(rs.getString("tel"));
 
         list.add(c);
       }
