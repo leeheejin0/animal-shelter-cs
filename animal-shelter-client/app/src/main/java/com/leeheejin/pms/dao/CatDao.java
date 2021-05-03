@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import com.leeheejin.pms.domain.Cat;
 import com.leeheejin.pms.domain.Manager;
-import com.leeheejin.pms.domain.Member;
 
 public class CatDao {
 
@@ -71,76 +70,53 @@ public class CatDao {
     return list;
   }
 
-  public Member findByNo(int no) throws Exception {
+  public Cat findById(int id) throws Exception {
     try (PreparedStatement stmt = con.prepareStatement(
-        "select * from pms_animal_cat where no = ?")) {
+        "select * from pms_animal_cat where id = ?")) {
 
-      stmt.setInt(1, no);
+      stmt.setInt(1, id);
 
       try (ResultSet rs = stmt.executeQuery()) {
         if (!rs.next()) {
           return null;
         }
 
-        Member m = new Member();
-        m.setNo(no);
-        m.setName(rs.getString("name"));
-        m.setEmail(rs.getString("email"));
-        m.setPhoto(rs.getString("photo"));
-        m.setTel(rs.getString("tel"));
-        m.setRegisteredDate(rs.getDate("rdt"));
+        Cat c = new Cat();
+        c.setIds(id);
+        c.setPhotos(rs.getString("photo"));
+        c.setBreeds(rs.getString("email"));
+        c.setGenders(rs.getString("gender"));
+        c.setAges(rs.getInt("age"));
+        c.setDates(rs.getDate("rdt"));
+        c.setPlaces(rs.getString("place"));
+        c.setStatus(rs.getString("status"));
 
-        return m;
+        Manager writer = new Manager();
+        writer.setNo(rs.getInt("writer_no"));
+        writer.setName(rs.getString("writer_name"));
+        c.setWriter(writer);
+
+        return c;
       }
     }
   }
 
-  public int update(Member member) throws Exception {
+  public int update(Cat cat) throws Exception {
     try (PreparedStatement stmt = con.prepareStatement(
-        "update pms_animal_cat set name=?,id=?,email=?,password=password(?),photo=?,tel=? where no=?")) {
+        "update pms_animal_cat set status=? where id=?")) {
 
-      stmt.setString(1, member.getName());
-      stmt.setString(2, member.getId());
-      stmt.setString(3, member.getEmail());
-      stmt.setString(4, member.getPassword());
-      stmt.setString(5, member.getPhoto());
-      stmt.setString(6, member.getTel());
-      stmt.setInt(7, member.getNo());
+      stmt.setString(1, cat.getStatus());
+      stmt.setInt(2, cat.getIds());
+
       return stmt.executeUpdate();
     }
   }
 
-  public int delete(int no) throws Exception {
+  public int delete(int id) throws Exception {
     try (PreparedStatement stmt = con.prepareStatement(
-        "delete from pms_animal_cat where no=?")) {
-      stmt.setInt(1, no);
+        "delete from pms_animal_cat where id=?")) {
+      stmt.setInt(1, id);
       return stmt.executeUpdate();
     }
   }
-
-  public Member findByName(String name) throws Exception {
-    try (PreparedStatement stmt = con.prepareStatement(
-        "select * from pms_animal_cat where name=?")) {
-
-      stmt.setString(1, name);
-
-      ResultSet rs = stmt.executeQuery();
-
-      if (!rs.next()) {
-        return null;
-      }
-
-      Member m = new Member();
-      m.setNo(rs.getInt("no"));
-      m.setName(rs.getString("name"));
-      m.setId(rs.getString("id"));
-      m.setEmail(rs.getString("email"));
-      m.setPhoto(rs.getString("photo"));
-      m.setTel(rs.getString("tel"));
-      m.setRegisteredDate(rs.getDate("rdt"));
-
-      return m;
-    }
-  }
-
 }
