@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import com.leeheejin.pms.domain.Cat;
+import com.leeheejin.pms.domain.Manager;
 import com.leeheejin.pms.domain.Member;
 
 public class CatDao {
@@ -55,9 +56,14 @@ public class CatDao {
         Cat c = new Cat();
         c.setIds(rs.getInt("id"));
         c.setPhotos(rs.getString("photo"));
-        c.setBreeds(rs.getString("email"));
-        c.setAges(rs.getInt("photo"));
-        c.setStatus(rs.getString("tel"));
+        c.setBreeds(rs.getString("breed"));
+        c.setAges(rs.getInt("age"));
+        c.setStatus(rs.getString("status"));
+
+        Manager writer = new Manager();
+        writer.setNo(rs.getInt("writer_no"));
+        writer.setName(rs.getString("writer_name"));
+        c.setWriter(writer);
 
         list.add(c);
       }
