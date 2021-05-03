@@ -9,11 +9,11 @@ import java.util.List;
 import com.leeheejin.pms.domain.Cat;
 import com.leeheejin.pms.domain.Manager;
 
-public class CatDao {
+public class OtherDao {
 
   Connection con;
 
-  public CatDao() throws Exception {
+  public OtherDao() throws Exception {
     this.con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/asdb?user=study&password=1111");
   }
@@ -37,7 +37,7 @@ public class CatDao {
     ArrayList<Cat> list = new ArrayList<>();
 
     try (PreparedStatement stmt = con.prepareStatement(
-        "select"
+        "select id,photo,breed,age,status"
             + " c.id,"
             + " c.photo,"
             + " c.breed,"
