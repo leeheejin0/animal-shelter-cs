@@ -4,11 +4,11 @@ import java.sql.Date;
 
 public class Member {
   private int no;
-  private String id;
   private String name;
+  private String id;
+  private String password;
   private String email;
   private String tel;
-  private String password;
   private String photo;
   private Date registeredDate;
 
